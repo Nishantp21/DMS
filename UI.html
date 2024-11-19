@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmers Loan Application</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function toggleKCCOptions() {
+      const loanType = document.getElementById("loan-type");
+      const kccOptions = document.getElementById("kcc-options");
+      if (loanType.value === "KCC") {
+        kccOptions.style.display = "block";
+      } else {
+        kccOptions.style.display = "none";
+      }
+    }
+
+    function toggleMinorityDropdown() {
+      const socialCategory = document.getElementById("social-category");
+      const minorityDropdown = document.getElementById("minority-group");
+      if (socialCategory.value === "Minorities") {
+        minorityDropdown.style.display = "block";
+      } else {
+        minorityDropdown.style.display = "none";
+      }
+    }
+
+    function addApplicant() {
+      const applicantsContainer = document.getElementById("additional-applicants");
+      const newApplicant = document.querySelector(".personal-information").cloneNode(true);
+      newApplicant.querySelectorAll("input, select").forEach((field) => {
+        field.value = ""; // Clear the cloned fields
+      });
+      applicantsContainer.appendChild(newApplicant);
+    }
+
+    function autofillAddress() {
+      const autofillCheckbox = document.getElementById("autofill-address");
+      if (autofillCheckbox.checked) {
+        document.getElementById("permanent-house").value = document.getElementById("present-house").value;
+        document.getElementById("permanent-street").value = document.getElementById("present-street").value;
+        document.getElementById("permanent-village").value = document.getElementById("present-village").value;
+        document.getElementById("permanent-post").value = document.getElementById("present-post").value;
+        document.getElementById("permanent-taluka").value = document.getElementById("present-taluka").value;
+        document.getElementById("permanent-district").value = document.getElementById("present-district").value;
+        document.getElementById("permanent-pin").value = document.getElementById("present-pin").value;
+      } else {
+        document.getElementById("permanent-house").value = "";
+        document.getElementById("permanent-street").value = "";
+        document.getElementById("permanent-village").value = "";
+        document.getElementById("permanent-post").value = "";
+        document.getElementById("permanent-taluka").value = "";
+        document.getElementById("permanent-district").value = "";
+        document.getElementById("permanent-pin").value = "";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Farmers Loan Application</h1>
+      <h2>Branch name ______</h2>
+      <p>Please fill out the details carefully. Fields marked with * are required.</p>
+    </header>
+    <form>
+      <!-- Personal Information Section -->
+      <div class="personal-information">
+        <fieldset>
+          <legend>Personal Information</legend>
+          <label for="full-name">Full Name of Applicant*:</label>
+          <input type="text" id="full-name" name="full-name" required>
+
+          <label for="dob">Date of Birth*:</label>
+          <input type="date" id="dob" name="dob" required>
+
+          <label for="age">Age*:</label>
+          <input type="number" id="age" name="age" required>
+
+          <label>Gender*:</label>
+          <div class="radio-group">
+            <input type="radio" id="male" name="gender" value="male" required>
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label>
+          </div>
+
+          <label for="aadhar">Aadhar Number*:</label>
+          <input type="text" id="aadhar" name="aadhar" maxlength="12" required>
+
+          <label for="id-proof">Voter’s ID / DL / PAN No*:</label>
+          <input type="text" id="id-proof" name="id-proof" required>
+
+          <label for="social-category">Social Category*:</label>
+          <select id="social-category" name="social-category" onchange="toggleMinorityDropdown()" required>
+            <option value="">--Select--</option>
+            <option value="SC">SC</option>
+            <option value="ST">ST</option>
+            <option value="OBC">OBC</option>
+            <option value="Physically Handicapped">Physically Handicapped</option>
+            <option value="Minorities">Minorities</option>
+          </select>
+
+          <div id="minority-group" style="display: none;">
+            <label for="minority">If Minority, Specify:</label>
+            <select id="minority" name="minority">
+              <option value="">--Select--</option>
+              <option value="Buddhists">Buddhists</option>
+              <option value="Muslims">Muslims</option>
+              <option value="Christians">Christians</option>
+              <option value="Sikhs">Sikhs</option>
+              <option value="Jains">Jains</option>
+              <option value="Zoroastrians">Zoroastrians</option>
+            </select>
+          </div>
+        </fieldset>
+      </div>
+      <div id="additional-applicants"></div>
+      <button type="button" onclick="addApplicant()">+ Add Another Applicant</button>
+
+      <!-- Purpose of Loan Section -->
+      <fieldset>
+        <legend>Purpose of Loan</legend>
+        <label for="loan-purpose">Choose One:</label>
+        <div class="radio-group">
+          <input type="radio" id="shg-loan" name="loan-purpose" value="SHG" required>
+          <label for="shg-loan">Loans to SHG Members</label>
+          <input type="radio" id="kisan-loan" name="loan-purpose" value="Kisan">
+          <label for="kisan-loan">Kisan Tatkal Loan</label>
+        </div>
+      </fieldset>
+
+      <!-- Type of Loan Section -->
+      <fieldset>
+        <legend>Type of Loan</legend>
+        <label for="loan-type">Type of Loan*:</label>
+        <select id="loan-type" name="loan-type" onchange="toggleKCCOptions()" required>
+          <option value="">--Select--</option>
+          <option value="Crop Loans">Crop Loans</option>
+          <option value="KCC">KCC</option>
+          <option value="Agri-Term Loan">Agri-Term Loan</option>
+        </select>
+
+        <div id="kcc-options" style="display: none;">
+          <label for="kcc-type">If KCC, Specify:</label>
+          <select id="kcc-type" name="kcc-type">
+            <option value="">--Select--</option>
+            <option value="Fresh">Issue of Fresh KCC</option>
+            <option value="Enhancement">Enhancement of Existing Limit</option>
+            <option value="Activation">Activation of Inoperative KCC Account</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <!-- Amount of Loan Section -->
+      <fieldset>
+        <legend>Amount of Loan</legend>
+        <label for="loan-amount">Amount of Loan Needed (in Rs.):</label>
+        <input type="number" id="loan-amount" name="loan-amount" required>
+      </fieldset>
+
+      <!-- Family Details Section -->
+      <fieldset>
+        <legend>Family Details</legend>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Relationship</th>
+              <th>Occupation</th>
+              <th>Annual Income (Rs.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 5 rows for family members -->
+            <tr>
+              <td><input type="text" name="family-name[]" required></td>
+              <td><input type="number" name="family-age[]" required></td>
+              <td>
+                <select name="family-gender[]">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </td>
+              <td><input type="text" name="family-relationship[]" required></td>
+              <td><input type="text" name="family-occupation[]" required></td>
+              <td><input type="number" name="family-income[]" required></td>
+            </tr>
+          </tbody>
+        </table>
+        <label for="karta-name">Name of the Karta (in case of Joint Hindu Family):</label>
+        <input type="text" id="karta-name" name="karta-name">
+      </fieldset>
+
+      <!-- Address and Contact Section -->
+      <fieldset>
+        <legend>Address and Contact</legend>
+        <h4>Present Address</h4>
+        <label for="present-house">House No.:</label>
+        <input type="text" id="present-house" name="present-house" required>
+        <label for="present-street">Street No.:</label>
+        <input type="text" id="present-street" name="present-street" required>
+        <label for="present-village">Village:</label>
+        <input type="text" id="present-village" name="present-village" required>
+        <label for="present-post">Post Office:</label>
+        <input type="text" id="present-post" name="present-post" required>
+        <label for="present-taluka">Taluka/Mandal:</label>
+        <input type="text" id="present-taluka" name="present-taluka" required>
+        <label for="present-district">District:</label>
+        <input type="text" id="present-district" name="present-district" required>
+        <label for="present-pin">Pin:</label>
+        <input type="text" id="present-pin" name="present-pin" required>
+
+        <h4>Permanent Address</h4>
+        <input type="checkbox" id="autofill-address" onchange="autofillAddress()"> Same as Present Address
+        <label for="permanent-house">House No.:</label>
+        <input type="text" id="permanent-house" name="permanent-house" required>
+        <label for="permanent-street">Street No.:</label>
+        <input type="text" id="permanent-street" name="permanent-street" required>
+        <label for="permanent-village">Village:</label>
+        <input type="text" id="permanent-village" name="permanent-village" required>
+        <label for="permanent-post">Post Office:</label>
+        <input type="text" id="permanent-post" name="permanent-post" required>
+        <label for="permanent-taluka">Taluka/Mandal:</label>
+        <input type="text" id="permanent-taluka" name="permanent-taluka" required>
+        <label for="permanent-district">District:</label>
+        <input type="text" id="permanent-district" name="permanent-district" required>
+        <label for="permanent-pin">Pin:</label>
+        <input type="text" id="permanent-pin" name="permanent-pin" required>
+
+        <h4>Contact Details</h4>
+        <label for="telephone">Telephone/Mobile No.:</label>
+        <input type="text" id="telephone" name="telephone" required>
+      </fieldset>
+
+      <fieldset>
+        <legend>Existing Banking/Credit Facilities</legend>
+        <table>
+          <thead>
+            <tr>
+              <th>Type of Facilities</th>
+              <th>Presently Banking With</th>
+              <th>Account No.</th>
+              <th>Balance Outstanding (Rs.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Savings Account</td>
+              <td><input type="text" name="savings-banking-with"></td>
+              <td><input type="text" name="savings-account-no"></td>
+              <td><input type="number" name="savings-balance-outstanding"></td>
+            </tr>
+            <tr>
+              <td>Fixed Deposit</td>
+              <td><input type="text" name="fd-banking-with"></td>
+              <td><input type="text" name="fd-account-no"></td>
+              <td><input type="number" name="fd-balance-outstanding"></td>
+            </tr>
+            <tr>
+              <td>PMJDY OD Account</td>
+              <td><input type="text" name="pmjdy-banking-with"></td>
+              <td><input type="text" name="pmjdy-account-no"></td>
+              <td><input type="number" name="pmjdy-balance-outstanding"></td>
+            </tr>
+            <tr>
+              <td>CC/Term Loan</td>
+              <td><input type="text" name="cc-banking-with"></td>
+              <td><input type="text" name="cc-account-no"></td>
+              <td><input type="number" name="cc-balance-outstanding"></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h4>Coverage Details</h4>
+        <label>Whether covered under:</label>
+        <div>
+          <input type="checkbox" id="pmjjby" name="coverage" value="PMJJBY">
+          <label for="pmjjby">PMJJBY</label>
+          <input type="checkbox" id="pmsby" name="coverage" value="PMSBY">
+          <label for="pmsby">PMSBY</label>
+          <input type="checkbox" id="apy" name="coverage" value="APY">
+          <label for="apy">APY</label>
+        </div>
+        
+        <label for="customer-id">If banking with this bank, customer ID to be given here:</label>
+        <input type="text" id="customer-id" name="customer-id">
+      </fieldset>
+
+      <fieldset style="background: #f9f9f9; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <legend style="font-size: 18px; font-weight: bold; color: #2c5f2d; padding: 0 10px;">Particulars of Total Land Holdings</legend>
+      
+        <!-- H. Particulars of Total Land Holdings -->
+        <h4 style="margin-top: 10px; font-size: 16px; color: #333;"> Particulars of Total Land Holdings</h4>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+              <tr style="background-color: #e9f5e9; color: #2c5f2d;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Name of the Village</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Survey/Khasra No.</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Owned</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Leased</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Share Cropper</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Area in Acres</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Of Which Irrigated</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Encumbrance if Any</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rows for Land Holdings -->
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="land-village[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="land-khasra[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><input type="checkbox" name="land-owned[]"></td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><input type="checkbox" name="land-leased[]"></td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><input type="checkbox" name="land-share-cropper[]"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="land-area[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="land-irrigated[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="land-encumbrance[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      
+        <!-- I. Land/Crop Details -->
+        <h4 style="margin-top: 10px; font-size: 16px; color: #333;"> Land/Crop Details Pertaining to the Loan</h4>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+              <tr style="background-color: #e9f5e9; color: #2c5f2d;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Name of the Village</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Survey/Khasra No.</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Area in Acres</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Source of Irrigation</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Name of Crops to be Grown</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Kharif Crops</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Rabi Crops</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Other Crops</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rows for Land/Crop Details -->
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="crop-village[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="crop-khasra[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="crop-area[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="crop-irrigation[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="crop-name[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="crop-kharif[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="crop-rabi[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="crop-other[]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+
+      <fieldset style="background: #f9f9f9; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+        <legend style="font-size: 18px; font-weight: bold; color: #2c5f2d; padding: 0 10px;">Source of Income</legend>
+      
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background-color: #e9f5e9; color: #2c5f2d;">
+              <th style="padding: 10px; border: 1px solid #ddd; width: 60%;">Source</th>
+              <th style="padding: 10px; border: 1px solid #ddd; width: 40%;">Amount (Rs.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;">Agricultural Income</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">
+                <input type="number" name="agricultural-income" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;">Other Income (Specify)</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">
+                <input type="number" name="other-income" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; background-color: #f7f7f7;">Total Income</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">
+                <input type="number" name="total-income" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" readonly>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </fieldset>
+
+      <fieldset style="background: #f9f9f9; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+        <legend style="font-size: 18px; font-weight: bold; color: #2c5f2d; padding: 0 10px;">Assets and Liabilities</legend>
+      
+        <!-- K. Particulars of Immovable Assets Owned -->
+        <h4 style="margin-top: 10px; font-size: 16px; color: #333;"> Particulars of Immovable Assets Owned</h4>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+              <tr style="background-color: #e9f5e9; color: #2c5f2d;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Immovable Assets</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Particulars/Description</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Present Market Value (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Agricultural Land</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="immovable-agri-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="immovable-agri-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Non-Agricultural Land</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="immovable-non-agri-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="immovable-non-agri-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">House/Building</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="immovable-house-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="immovable-house-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Tractor Shed/Farm Shed</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="immovable-shed-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="immovable-shed-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Fishing Ponds/Tank</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="immovable-pond-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="immovable-pond-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; background-color: #f7f7f7;">Total Value</td>
+                <td style="padding: 10px; border: 1px solid #ddd;" colspan="2"><input type="number" name="immovable-total-value" style="width: 100%;" readonly></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      
+        <!-- L. Particulars of Movable Assets Owned -->
+        <h4 style="margin-top: 10px; font-size: 16px; color: #333;"> Particulars of Movable Assets Owned</h4>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+              <tr style="background-color: #e9f5e9; color: #2c5f2d;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Movable Assets</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Particulars/Description</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Present Market Value (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Plough Cattle/Milch Cattle</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="movable-cattle-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="movable-cattle-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Poultry Birds</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="movable-poultry-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="movable-poultry-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Tractors</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="movable-tractors-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="movable-tractors-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Power Tillers</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="movable-power-tillers-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="movable-power-tillers-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Elec. Motors/Pumpsets</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="movable-motors-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="movable-motors-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Other Implements</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="movable-other-desc" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="movable-other-value" style="width: 100%;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; background-color: #f7f7f7;">Total Value</td>
+                <td style="padding: 10px; border: 1px solid #ddd;" colspan="2"><input type="number" name="movable-total-value" style="width: 100%;" readonly></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      
+        <!-- M. Particulars of Existing Liabilities -->
+        <h4 style="margin-top: 10px; font-size: 16px; color: #333;"> Particulars of Existing Liabilities as Borrower, If Any</h4>
+        <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+            <tr style="background-color: #e9f5e9; color: #2c5f2d;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Name of the Institution</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Purpose of Loan</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Present Outstanding (Rs.)</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Of Which Overdue</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Security Offered</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Row for Our Bank -->
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Our Bank</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="our-bank-purpose" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="our-bank-outstanding" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="our-bank-overdue" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="our-bank-security" style="width: 100%;"></td>
+            </tr>
+            <!-- Row for Other Banks -->
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Other Banks</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="other-banks-purpose" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="other-banks-outstanding" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="other-banks-overdue" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="other-banks-security" style="width: 100%;"></td>
+            </tr>
+            <!-- Row for Agricultural Credit Societies -->
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Agricultural Credit Societies</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="credit-societies-purpose" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="credit-societies-outstanding" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="credit-societies-overdue" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="credit-societies-security" style="width: 100%;"></td>
+            </tr>
+            <!-- Row for Land Development Bank -->
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Land Development Bank</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="land-dev-bank-purpose" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="land-dev-bank-outstanding" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="land-dev-bank-overdue" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="land-dev-bank-security" style="width: 100%;"></td>
+            </tr>
+            <!-- Row for Other Creditors -->
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Other Creditors (Govt. dues)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="other-creditors-purpose" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="other-creditors-outstanding" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="number" name="other-creditors-overdue" style="width: 100%;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><input type="text" name="other-creditors-security" style="width: 100%;"></td>
+            </tr>
+            <!-- Row for Total Outstanding -->
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; background-color: #f7f7f7;">Total Outstanding</td>
+                <td style="padding: 10px; border: 1px solid #ddd;" colspan="4"><input type="number" name="total-outstanding" style="width: 100%;" readonly></td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+      </fieldset>
+
+      <fieldset style="background: #f9f9f9; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+        <legend style="font-size: 18px; font-weight: bold; color: #2c5f2d; padding: 0 10px;"> Net Worth of Applicant(s)</legend>
+      
+        <div style="margin-top: 10px;">
+          <label for="net-worth-total" style="font-size: 16px; font-weight: bold; color: #333;">
+            Net Worth of Applicant(s): [(K + L) - M] Rs.
+          </label>
+          <input
+            type="number"
+            id="net-worth-total"
+            name="net-worth-total"
+            style="width: 200px; margin-left: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;"
+            readonly
+          />
+        </div>
+      </fieldset>
+
+      <script>
+        function calculateNetWorth() {
+          const immovable = parseFloat(document.getElementById('net-worth-immovable').value) || 0;
+          const movable = parseFloat(document.getElementById('net-worth-movable').value) || 0;
+          const liabilities = parseFloat(document.getElementById('net-worth-liabilities').value) || 0;
+      
+          const totalNetWorth = immovable + movable - liabilities;
+      
+          document.getElementById('net-worth-total').value = totalNetWorth.toFixed(2);
+        }
+      
+        // Attach event listeners to update the net worth whenever related values change
+        document.getElementById('net-worth-immovable').addEventListener('input', calculateNetWorth);
+        document.getElementById('net-worth-movable').addEventListener('input', calculateNetWorth);
+        document.getElementById('net-worth-liabilities').addEventListener('input', calculateNetWorth);
+      </script>
+
+<fieldset style="background: #f9f9f9; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+    <legend style="font-size: 18px; font-weight: bold; color: #2c5f2d; padding: 0 10px;"> Security Proposed to Be Offered</legend>
+  
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="background-color: #e9f5e9; color: #2c5f2d;">
+            <th style="padding: 10px; border: 1px solid #ddd;">Particulars of Primary Security Offered</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Particulars of Collateral Security (Where Applicable)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              <textarea name="primary-security" style="width: 100%; height: 80px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Enter details of primary security offered"></textarea>
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              <textarea name="collateral-security" style="width: 100%; height: 80px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Enter details of collateral security, if applicable"></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </fieldset>
+      
+      <fieldset style="background: #f9f9f9; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+        <legend style="font-size: 18px; font-weight: bold; color: #2c5f2d; padding: 0 10px;">Declaration</legend>
+      
+        <p style="font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 20px;">
+          I/We hereby declare that all information furnished by me/us is true, correct, and complete to the best of my/our knowledge and belief. I/We have no borrowing/liabilities excepting those mentioned in the application form. I/We hereby authorize the Bank to disclose all or any particulars or details or information relating to my/our loan accounts with the Bank, to any other financial institution, government, or any agency(ies) as may be considered necessary or desirable by the Bank. It will be in order for the Bank to disqualify me/us from receiving any credit facilities from the Bank in case it is proved that the declaration of my/our outside borrowings made above contains misrepresentation of facts. I/We hereby undertake to abide by the terms and conditions that the Bank may stipulate in the sanction of this loan and inform the Bank in the event of acquiring any other assets during the tenure of the advance. The Bank may take appropriate safeguards/action for recovery of Bank’s dues.
+        </p>
+      
+        <!-- Checkbox for Declaration Agreement -->
+        <div style="margin-bottom: 20px;">
+          <label>
+            <input type="checkbox" id="declaration-checkbox" name="declaration-agreement" required>
+            I/We agree to the above declaration.
+          </label>
+        </div>
+      
+        <!-- Date, Place, and Signature Section -->
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+          <div style="width: 30%;">
+            <label for="date">Date:</label>
+            <input type="text" id="date" name="date" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+          </div>
+          <div style="width: 30%;">
+            <label for="place">Place:</label>
+            <input type="text" id="place" name="place" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+          </div>
+          <div style="width: 30%;">
+            <label for="signature">Signature:</label>
+            <input type="text" id="signature" name="signature" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Acknowledgement/In-principle Approval Section -->
+<fieldset style="background: #f9f9f9; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+    <legend style="font-size: 18px; font-weight: bold; color: #2c5f2d; padding: 0 10px;">Acknowledgement/In-principle Approval</legend>
+  
+    <p style="font-size: 14px; color: #333; margin-bottom: 20px;">
+      Received the loan application from Shri/Smt.
+      <input type="text" name="applicant-name" style="width: 60%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Enter applicant's name">,
+      residence of
+      <input type="text" name="residence" style="width: 70%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Enter address">,
+      on
+      <input type="date" name="application-date" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+      for the purpose of opening of KCC account.
+    </p>
+  
+    <p style="font-size: 14px; color: #333;">
+      2. We convey our In-principle approval for the loan applied. The final sanction will be subject to the Bank’s field inspection, due diligence, and terms and conditions as applicable for KCC loans.
+    </p>
+  
+    <!-- Date and Signature -->
+    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+      <div style="width: 45%;">
+        <label for="ack-date" style="font-size: 14px;">Date:</label>
+        <input type="date" id="ack-date" name="ack-date" style="width: 70%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+      </div>
+      <div style="width: 45%; text-align: right;">
+        <label for="officer-signature" style="font-size: 14px;">Signature of Branch Manager:</label>
+        <input type="text" id="officer-signature" name="officer-signature" style="width: 60%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Enter officer's name">
+      </div>
+    </div>
+  </fieldset>
+
+      <!-- Submit Section -->
+      <div class="form-footer">
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+      </div>
+    </form>
+    <footer>
+      <p><a href="#">Need Help? Click Here for FAQs</a></p>
+    </footer>
+  </div>
+</body>
+</html>
